@@ -1,4 +1,6 @@
 <style>
+  /* ncSender styles every button in a plugin window (accent fill, its own
+     padding); the #vx-root rules below are written to win over that. */
   /* ncSender's own dialog header is hidden: the rail has the name and Close. */
   .plugin-dialog-header { display: none !important; }
   .plugin-dialog-content { padding: 0 !important; }
@@ -19,9 +21,9 @@
     background: var(--color-surface, #fff); border: 1.5px solid var(--vx-border); }
   .vx-step.on { background: var(--color-surface, #fff); color: var(--vx-text); }
   .vx-step.on i, .vx-step.done i { background: var(--vx-accent); border-color: var(--vx-accent); color: #fff; }
-  .vx-btn { font: inherit; font-weight: 700; border: 0; border-radius: 12px; padding: 13px 20px; cursor: pointer; background: var(--vx-accent); color: #fff; }
-  .vx-btn:disabled { opacity: .5; cursor: default; }
-  .vx-btn.sec { background: var(--vx-muted); color: var(--vx-text); border: 1.5px solid var(--vx-border); }
+  #vx-root .vx-btn { font: inherit; font-size: 0.92rem; font-weight: 600; line-height: 1.2; border: 0; border-radius: 10px; padding: 10px 16px; cursor: pointer; background: var(--vx-accent); color: #fff; }
+  #vx-root .vx-btn:disabled { opacity: .5; cursor: default; }
+  #vx-root .vx-btn.sec { background: var(--vx-muted); color: var(--vx-text); border: 1.5px solid var(--vx-border); }
   .vx-body { flex: 1; min-width: 0; padding: 24px; overflow-y: auto; }
   .vx-view { display: flex; flex-direction: column; gap: 16px; min-height: 100%; }
   .vx-view h2 { margin: 0; font-size: 1.4rem; letter-spacing: -.01em; }
@@ -38,13 +40,13 @@
   .vx-code b { width: 46px; height: 56px; border-radius: 12px; background: var(--vx-muted); border: 1.5px solid var(--vx-border); display: grid; place-items: center; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
   .vx-code b.next { border-color: var(--vx-accent); }
   .vx-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 300px; margin: 0 auto; }
-  .vx-pad button { font: inherit; font-size: 1.25rem; font-weight: 600; padding: 13px 0; border-radius: 12px; border: 1.5px solid var(--vx-border); background: var(--vx-muted); color: var(--vx-text); cursor: pointer; }
+  #vx-root .vx-pad button { font: inherit; font-size: 1.25rem; font-weight: 600; padding: 13px 0; border-radius: 12px; border: 1.5px solid var(--vx-border); background: var(--vx-muted); color: var(--vx-text); cursor: pointer; }
   .vx-crumbs { font-weight: 700; overflow-wrap: anywhere; }
   .vx-tree { border: 1.5px solid var(--vx-border); border-radius: 12px; overflow: hidden; }
-  .vx-row { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 14px; border: 0; border-bottom: 1px solid var(--vx-border); background: transparent; color: var(--vx-text); font: inherit; text-align: left; cursor: pointer; }
-  .vx-row:last-child { border-bottom: 0; }
-  .vx-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .vx-row small { color: var(--vx-text2); }
+  #vx-root .vx-row { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 14px; border: 0; border-bottom: 1px solid var(--vx-border); background: transparent; color: var(--vx-text); font: inherit; font-weight: 400; border-radius: 0; text-align: left; cursor: pointer; }
+  #vx-root .vx-row:last-child { border-bottom: 0; }
+  #vx-root .vx-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #vx-root .vx-row small { color: var(--vx-text2); }
   .vx-empty { padding: 14px; color: var(--vx-text2); }
   .vx-card { background: var(--vx-muted); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
   .vx-kv { display: flex; justify-content: space-between; gap: 12px; }
@@ -52,10 +54,10 @@
   .vx-kv b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .vx-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; background: var(--vx-ok); }
   .vx-dot.busy { background: var(--vx-info); } .vx-dot.bad { background: var(--vx-bad); } .vx-dot.off { background: var(--vx-text2); }
-  .vx-switch { width: 50px; height: 28px; border-radius: 14px; border: 0; padding: 0; position: relative; flex: none; cursor: pointer; background: var(--vx-border); }
-  .vx-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .15s; }
-  .vx-switch[aria-checked="true"] { background: var(--vx-accent); }
-  .vx-switch[aria-checked="true"]::after { transform: translateX(22px); }
+  #vx-root .vx-switch { width: 50px; height: 28px; border-radius: 14px; border: 0; padding: 0; position: relative; flex: none; cursor: pointer; background: var(--vx-border); }
+  #vx-root .vx-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .15s; }
+  #vx-root .vx-switch[aria-checked="true"] { background: var(--vx-accent); }
+  #vx-root .vx-switch[aria-checked="true"]::after { transform: translateX(22px); }
   .vx-log div { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--vx-border); min-width: 0; }
   .vx-log div:last-child { border-bottom: 0; }
   .vx-log em { font-style: normal; font-weight: 700; width: 20px; text-align: center; flex: none; }
