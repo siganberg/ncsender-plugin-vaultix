@@ -1,0 +1,24 @@
+{
+  "id": "com.ncsender.vaultix",
+  "name": "Vaultix Sync",
+  "version": "0.1.0",
+  "minAppVersion": "2.0.225",
+  "author": "FrancisCreation",
+  "description": "Syncs a folder of your Vaultix cloud drive with the ncSender file manager on a kiosk. Sign in with your Vaultix account (two-factor codes and app passwords work), pick a folder, and its G-code files appear under Vaultix in the file manager; files made on the kiosk go back up. On a desktop it shows how to set up the Vaultix app instead.",
+  "entry": "index.js",
+  "commands": "commands.js",
+  "configUi": "config.html",
+  "icon": "icon.png",
+  "category": "utility",
+  "repository": "https://github.com/siganberg/ncsender-plugin-vaultix",
+  "priority": 90,
+  "platforms": {
+    "v2": "2.0.225",
+    "pro-v2": "2.0.316"
+  },
+  "events": ["background"],
+  "permissions": ["network", "files"],
+  "toolMenu": [
+    { "id": "open-config", "label": "Vaultix Sync", "icon": "icon.png", "clientOnly": true }
+  ]
+}

@@ -1,0 +1,349 @@
+<style>
+  /* ncSender's own dialog header is hidden: the rail has the name and Close. */
+  .plugin-dialog-header { display: none !important; }
+  .plugin-dialog-content { padding: 0 !important; }
+
+  .vx { --vx-accent: var(--color-accent, #1a9c8f); --vx-border: var(--color-border, #d3d9e1); --vx-muted: var(--color-surface-muted, #f1f4f8);
+    --vx-text: var(--color-text-primary, #17202b); --vx-text2: var(--color-text-secondary, #5b6776); --vx-ok: #2e9d5b; --vx-bad: #d6453d; --vx-info: #3b82f6;
+    width: 860px; max-width: 95vw; height: 600px; max-height: 85vh; display: flex; overflow: hidden;
+    background: var(--color-surface, #fff); color: var(--vx-text); border-radius: var(--radius-medium, 12px);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; line-height: 1.45; }
+  .vx *, .vx *::before, .vx *::after { box-sizing: border-box; }
+  .vx [hidden] { display: none !important; }
+  .vx-rail { width: 210px; flex: none; background: var(--vx-muted); border-right: 1px solid var(--vx-border); padding: 18px 12px; display: flex; flex-direction: column; gap: 16px; }
+  .vx-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--vx-accent); }
+  .vx-title { display: block; font-size: 1.1rem; font-weight: 700; }
+  .vx-steps { flex: 1; display: flex; flex-direction: column; gap: 4px; }
+  .vx-step { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; color: var(--vx-text2); font-weight: 600; }
+  .vx-step i { width: 24px; height: 24px; border-radius: 50%; flex: none; display: grid; place-items: center; font-style: normal; font-size: .78rem;
+    background: var(--color-surface, #fff); border: 1.5px solid var(--vx-border); }
+  .vx-step.on { background: var(--color-surface, #fff); color: var(--vx-text); }
+  .vx-step.on i, .vx-step.done i { background: var(--vx-accent); border-color: var(--vx-accent); color: #fff; }
+  .vx-btn { font: inherit; font-weight: 700; border: 0; border-radius: 12px; padding: 13px 20px; cursor: pointer; background: var(--vx-accent); color: #fff; }
+  .vx-btn:disabled { opacity: .5; cursor: default; }
+  .vx-btn.sec { background: var(--vx-muted); color: var(--vx-text); border: 1.5px solid var(--vx-border); }
+  .vx-body { flex: 1; min-width: 0; padding: 24px; overflow-y: auto; }
+  .vx-view { display: flex; flex-direction: column; gap: 16px; min-height: 100%; }
+  .vx-view h2 { margin: 0; font-size: 1.4rem; letter-spacing: -.01em; }
+  .vx-view p { margin: 0; color: var(--vx-text2); }
+  .vx-field { display: flex; flex-direction: column; gap: 6px; font-weight: 600; }
+  .vx-input { font: inherit; font-weight: 400; color: var(--vx-text); background: var(--vx-muted); border: 1.5px solid var(--vx-border); border-radius: 12px; padding: 12px 14px; width: 100%; }
+  .vx-input:focus { outline: none; border-color: var(--vx-accent); }
+  .vx-hint { color: var(--vx-text2); font-size: .82rem; font-weight: 400; }
+  .vx-two { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .vx-actions { margin-top: auto; display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+  .vx-error { background: color-mix(in srgb, var(--vx-bad) 12%, transparent); color: var(--vx-bad); border-radius: 10px; padding: 10px 12px; font-weight: 600; }
+  .vx-warn { background: color-mix(in srgb, var(--vx-info) 12%, transparent); color: var(--vx-text); border-radius: 10px; padding: 10px 12px; }
+  .vx-code { display: flex; gap: 8px; justify-content: center; }
+  .vx-code b { width: 46px; height: 56px; border-radius: 12px; background: var(--vx-muted); border: 1.5px solid var(--vx-border); display: grid; place-items: center; font-size: 1.5rem; font-variant-numeric: tabular-nums; }
+  .vx-code b.next { border-color: var(--vx-accent); }
+  .vx-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; width: 100%; max-width: 300px; margin: 0 auto; }
+  .vx-pad button { font: inherit; font-size: 1.25rem; font-weight: 600; padding: 13px 0; border-radius: 12px; border: 1.5px solid var(--vx-border); background: var(--vx-muted); color: var(--vx-text); cursor: pointer; }
+  .vx-crumbs { font-weight: 700; overflow-wrap: anywhere; }
+  .vx-tree { border: 1.5px solid var(--vx-border); border-radius: 12px; overflow: hidden; }
+  .vx-row { display: flex; align-items: center; gap: 10px; width: 100%; padding: 13px 14px; border: 0; border-bottom: 1px solid var(--vx-border); background: transparent; color: var(--vx-text); font: inherit; text-align: left; cursor: pointer; }
+  .vx-row:last-child { border-bottom: 0; }
+  .vx-row span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vx-row small { color: var(--vx-text2); }
+  .vx-empty { padding: 14px; color: var(--vx-text2); }
+  .vx-card { background: var(--vx-muted); border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .vx-kv { display: flex; justify-content: space-between; gap: 12px; }
+  .vx-kv span { color: var(--vx-text2); flex: none; }
+  .vx-kv b { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vx-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; background: var(--vx-ok); }
+  .vx-dot.busy { background: var(--vx-info); } .vx-dot.bad { background: var(--vx-bad); } .vx-dot.off { background: var(--vx-text2); }
+  .vx-switch { width: 50px; height: 28px; border-radius: 14px; border: 0; padding: 0; position: relative; flex: none; cursor: pointer; background: var(--vx-border); }
+  .vx-switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 22px; height: 22px; border-radius: 50%; background: #fff; transition: transform .15s; }
+  .vx-switch[aria-checked="true"] { background: var(--vx-accent); }
+  .vx-switch[aria-checked="true"]::after { transform: translateX(22px); }
+  .vx-log div { display: flex; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--vx-border); min-width: 0; }
+  .vx-log div:last-child { border-bottom: 0; }
+  .vx-log em { font-style: normal; font-weight: 700; width: 20px; text-align: center; flex: none; }
+  .vx-log .down em { color: var(--vx-info); } .vx-log .up em { color: var(--vx-ok); } .vx-log .conflict em, .vx-log .error em { color: var(--vx-bad); } .vx-log .removed em { color: var(--vx-text2); }
+  .vx-log span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vx-log small { color: var(--vx-text2); flex: none; }
+  .vx-copy { user-select: all; overflow-wrap: anywhere; }
+
+  @media (orientation: portrait) {
+    .vx { flex-direction: column; height: 78vh; max-height: 78vh; width: 95vw; }
+    .vx-rail { width: auto; flex-direction: row; align-items: center; border-right: 0; border-bottom: 1px solid var(--vx-border); padding: 10px 12px; gap: 10px; }
+    .vx-steps { flex-direction: row; justify-content: center; gap: 6px; }
+    .vx-step { padding: 6px; } .vx-step span { display: none; }
+    .vx-two { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="vx" id="vx-root">
+  <nav class="vx-rail">
+    <div><span class="vx-eyebrow">Cloud drive</span><span class="vx-title">Vaultix Sync</span></div>
+    <div class="vx-steps" id="vx-steps"></div>
+    <button class="vx-btn" id="vx-close">Close</button>
+  </nav>
+  <div class="vx-body">
+    <div class="vx-view" data-view="loading"><p>Loading…</p></div>
+
+    <div class="vx-view" data-view="update" hidden>
+      <h2>Update ncSender first</h2>
+      <p>Vaultix Sync needs a newer ncSender than the one running here. Update ncSender, then open this again.</p>
+    </div>
+
+    <div class="vx-view" data-view="desktop" hidden>
+      <h2>Use the Vaultix app on this computer</h2>
+      <p>This plugin is for ncSender kiosks. On a desktop, the Vaultix app syncs faster and keeps working when ncSender is closed.</p>
+      <div class="vx-card"><b>1 · Install Vaultix</b><span class="vx-hint">Get the app for macOS, Windows or Linux. The same page has the server, if you don't run one yet:</span>
+        <a class="vx-input vx-copy" href="https://github.com/siganberg/vaultix/releases/latest" target="_blank" rel="noopener">github.com/siganberg/vaultix/releases/latest</a></div>
+      <div class="vx-card"><b>2 · Point it at your ncSender files</b>
+        <span class="vx-hint">When the app asks which folder to sync, choose this one. Your Vaultix files then show up in the ncSender file manager.</span>
+        <div class="vx-input vx-copy" id="vx-libpath"></div>
+        <div><button class="vx-btn" id="vx-copy">Copy folder path</button></div></div>
+    </div>
+
+    <form class="vx-view" data-view="signin" hidden id="vx-signin">
+      <h2>Sign in to your Vaultix</h2>
+      <p>Use the same address and account as the Vaultix web app.</p>
+      <div class="vx-error" id="vx-signin-error" hidden></div>
+      <label class="vx-field">Server<input class="vx-input" id="vx-server" placeholder="https://drive.example.com" autocomplete="off" autocapitalize="off" spellcheck="false">
+        <span class="vx-hint">The address you open in the browser.</span></label>
+      <div class="vx-two">
+        <label class="vx-field">Username<input class="vx-input" id="vx-user" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+        <label class="vx-field">Password or app password<input class="vx-input" id="vx-pass" type="password" autocomplete="off"></label>
+      </div>
+      <span class="vx-hint">The password is used once to register this kiosk, then forgotten.</span>
+      <span class="vx-hint">No Vaultix server yet? It's a free cloud drive you run yourself. Download and setup steps:
+        <a href="https://github.com/siganberg/vaultix" target="_blank" rel="noopener" style="color:var(--vx-accent);font-weight:600">github.com/siganberg/vaultix</a></span>
+      <div class="vx-actions"><button class="vx-btn" id="vx-signin-go" type="submit">Sign in</button></div>
+    </form>
+
+    <div class="vx-view" data-view="code" hidden>
+      <h2 id="vx-code-title">Enter your 6-digit code</h2>
+      <p id="vx-code-lead">Open your authenticator app and type the code for Vaultix.</p>
+      <div class="vx-error" id="vx-code-error" hidden></div>
+      <div class="vx-code" id="vx-code-boxes"></div>
+      <div class="vx-pad" id="vx-pad"></div>
+      <label class="vx-field" id="vx-recovery-field" hidden>Recovery code<input class="vx-input" id="vx-recovery" autocomplete="off" autocapitalize="off" spellcheck="false"></label>
+      <div class="vx-actions">
+        <button class="vx-btn sec" id="vx-code-back">Back</button>
+        <button class="vx-btn sec" id="vx-code-mode">Use a recovery code</button>
+        <button class="vx-btn" id="vx-code-go">Verify</button>
+      </div>
+    </div>
+
+    <div class="vx-view" data-view="folder" hidden>
+      <h2>Which folder should sync?</h2>
+      <p>G-code files in the folder you pick appear under <b>Vaultix</b> in the ncSender file manager.</p>
+      <div class="vx-error" id="vx-folder-error" hidden></div>
+      <div class="vx-crumbs" id="vx-crumbs"></div>
+      <div class="vx-tree" id="vx-tree"></div>
+      <span class="vx-hint">Only G-code files sync (.nc, .gcode, .ngc, .tap, .cnc).</span>
+      <div class="vx-actions"><button class="vx-btn sec" id="vx-folder-signout">Sign out</button><button class="vx-btn" id="vx-folder-go">Sync this folder</button></div>
+    </div>
+
+    <div class="vx-view" data-view="status" hidden>
+      <h2><span class="vx-dot" id="vx-dot"></span><span id="vx-headline">Up to date</span></h2>
+      <div class="vx-error" id="vx-status-error" hidden></div>
+      <div class="vx-warn" id="vx-status-warn" hidden></div>
+      <div class="vx-two">
+        <div class="vx-card">
+          <div class="vx-kv"><span>Signed in as</span><b id="vx-s-user"></b></div>
+          <div class="vx-kv"><span>Server</span><b id="vx-s-server"></b></div>
+          <div class="vx-kv"><span>Folder</span><b id="vx-s-folder"></b></div>
+          <div class="vx-kv"><span>Last sync</span><b id="vx-s-last"></b></div>
+        </div>
+        <div class="vx-card">
+          <div class="vx-kv"><span>Sync automatically</span><button class="vx-switch" id="vx-auto" role="switch" aria-checked="true" aria-label="Sync automatically"></button></div>
+          <span class="vx-hint">Checks every minute. Waits while a job is running.</span>
+          <button class="vx-btn" id="vx-sync">Sync now</button>
+        </div>
+      </div>
+      <div class="vx-card"><b>Recent</b><div class="vx-log" id="vx-log"></div></div>
+      <div class="vx-actions"><button class="vx-btn sec" id="vx-change">Change folder</button><button class="vx-btn sec" id="vx-signout">Sign out</button></div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  var BASE = window.location.origin.replace(/\/$/, '') || 'http://localhost:__SERVER_PORT__';
+  var URL_REQ = BASE + '/api/plugins/com.ncsender.vaultix/request';
+  var root = document.getElementById('vx-root');
+  var $ = function (id) { return document.getElementById(id); };
+  var st = null;          // the plugin's last answer
+  var view = 'loading';
+  var code = '';          // digits typed on the code step
+  var recovery = false;   // code step: typing a recovery code
+  var browsed = null;     // folder step: the path asked for
+  var filled = false;
+
+  function ask(body) {
+    return fetch(URL_REQ, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body || {}) })
+      .then(function (r) { if (r.status === 404) throw { update: true }; return r.json(); })
+      .then(function (s) { if (s.unsupported) throw { update: true }; st = s; render(); return s; })
+      .catch(function (e) { if (e && e.update) show('update'); });
+  }
+
+  function show(name) {
+    view = name;
+    Array.prototype.forEach.call(root.querySelectorAll('.vx-view'), function (v) { v.hidden = v.getAttribute('data-view') !== name; });
+    var steps = { signin: 0, code: 1, folder: 2 };
+    var markup = '';
+    if (name in steps) ['Sign in', 'Code', 'Folder'].forEach(function (t, i) {
+      var n = steps[name];
+      markup += '<div class="vx-step ' + (i === n ? 'on' : i < n ? 'done' : '') + '"><i>' + (i < n ? '✓' : i + 1) + '</i><span>' + t + '</span></div>';
+    });
+    else if (name === 'status') markup = '<div class="vx-step on"><i>✓</i><span>Status</span></div>';
+    html($('vx-steps'), markup);
+  }
+
+  // Rebuilding a list under a finger loses the tap, so only touch the DOM on a real change.
+  function html(el, value) { if (el.__vx !== value) { el.innerHTML = value; el.__vx = value; } }
+  function text(el, value) { el.textContent = value == null ? '' : value; }
+  function flag(el, message) { el.hidden = !message; text(el, message || ''); }
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+
+  function ago(t) {
+    if (!t) return 'Not yet';
+    var s = Math.max(0, Math.round((Date.now() - t) / 1000));
+    if (s < 60) return 'Just now';
+    if (s < 3600) return Math.floor(s / 60) + ' min ago';
+    if (s < 86400) return Math.floor(s / 3600) + ' h ago';
+    return new Date(t).toLocaleDateString();
+  }
+
+  function render() {
+    if (!st) return;
+    if (!st.kiosk) { text($('vx-libpath'), st.libraryPath); return show('desktop'); }
+    if (!st.signedIn) {
+      if (st.login.state === 'needCode') return renderCode();
+      if (!filled) { $('vx-server').value = st.server || ''; $('vx-user').value = st.username || ''; filled = true; }
+      flag($('vx-signin-error'), st.login.state === 'error' ? st.login.error : st.error);
+      $('vx-signin-go').disabled = st.login.state === 'working';
+      text($('vx-signin-go'), st.login.state === 'working' ? 'Signing in…' : 'Sign in');
+      return show('signin');
+    }
+    if (st.folder === null) return renderFolder();
+    renderStatus();
+  }
+
+  function renderCode() {
+    var boxes = '';
+    for (var i = 0; i < 6; i++) boxes += '<b class="' + (i === code.length ? 'next' : '') + '">' + (code[i] || '') + '</b>';
+    html($('vx-code-boxes'), boxes);
+    $('vx-code-boxes').hidden = $('vx-pad').hidden = recovery;
+    $('vx-recovery-field').hidden = !recovery;
+    text($('vx-code-title'), recovery ? 'Enter a recovery code' : 'Enter your 6-digit code');
+    text($('vx-code-lead'), recovery ? 'Use one of the recovery codes you saved when you turned on two-factor. Each works once.' : 'Open your authenticator app and type the code for Vaultix.');
+    text($('vx-code-mode'), recovery ? 'Use the app code' : 'Use a recovery code');
+    flag($('vx-code-error'), st.login.error);
+    show('code');
+  }
+
+  function renderFolder() {
+    var b = st.browse;
+    if (browsed === null) { browsed = ''; ask({ action: 'browse', path: '' }); }
+    var parts = b.path ? b.path.split('/') : [];
+    text($('vx-crumbs'), 'Vaultix' + (parts.length ? ' / ' + parts.join(' / ') : ''));
+    flag($('vx-folder-error'), b.state === 'error' ? b.error : null);
+    var rows = '';
+    if (parts.length) rows += '<button class="vx-row" data-path="' + esc(parts.slice(0, -1).join('/')) + '"><span>↑ Up</span></button>';
+    if (b.state === 'working') rows += '<div class="vx-empty">Loading…</div>';
+    else {
+      (b.folders || []).forEach(function (name) {
+        rows += '<button class="vx-row" data-path="' + esc(b.path ? b.path + '/' + name : name) + '"><span>📁 ' + esc(name) + '</span><small>Open</small></button>';
+      });
+      if (!(b.folders || []).length) rows += '<div class="vx-empty">No folders inside.</div>';
+    }
+    html($('vx-tree'), rows);
+    text($('vx-folder-go'), b.path ? 'Sync “' + parts[parts.length - 1] + '”' : 'Sync the whole drive');
+    $('vx-folder-go').disabled = b.state !== 'ok';
+    show('folder');
+  }
+
+  function renderStatus() {
+    var dot = 'vx-dot', head = 'Up to date';
+    if (st.phase === 'syncing') { dot += ' busy'; head = st.progress.total ? 'Syncing ' + Math.min(st.progress.done + 1, st.progress.total) + ' of ' + st.progress.total : 'Checking for changes…'; }
+    else if (st.error) { dot += ' bad'; head = 'Needs attention'; }
+    else if (st.busy) { dot += ' off'; head = 'Waiting for the job to finish'; }
+    else if (!st.lastSync) { dot += ' off'; head = 'Not synced yet'; }
+    else if (!st.auto) { dot += ' off'; head = 'Automatic sync is off'; }
+    $('vx-dot').className = dot;
+    text($('vx-headline'), head);
+    flag($('vx-status-error'), st.phase === 'syncing' ? null : st.error);
+    flag($('vx-status-warn'), st.warning);
+    text($('vx-s-user'), st.username);
+    text($('vx-s-server'), st.server.replace(/^https?:\/\//, ''));
+    text($('vx-s-folder'), '/' + st.folder + ' → ' + st.localFolder);
+    text($('vx-s-last'), ago(st.lastSync));
+    $('vx-auto').setAttribute('aria-checked', st.auto ? 'true' : 'false');
+    $('vx-sync').disabled = st.phase === 'syncing' || st.busy;
+    var icons = { down: '↓', up: '↑', conflict: '!', error: '✕', removed: '−' };
+    var notes = { conflict: ' changed in both places, kept both', error: ' could not sync', removed: ' removed (deleted on Vaultix)' };
+    html($('vx-log'), st.recent.length ? st.recent.map(function (r) {
+      return '<div class="' + r.k + '"><em>' + (icons[r.k] || '·') + '</em><span>' + esc(r.p + (notes[r.k] || '')) + '</span><small>' + ago(r.t) + '</small></div>';
+    }).join('') : '<div><span class="vx-hint">Nothing synced yet.</span></div>');
+    show('status');
+  }
+
+  /* ---------- actions ---------- */
+
+  $('vx-close').addEventListener('click', function () { window.postMessage({ type: 'close-plugin-dialog' }, '*'); });
+
+  $('vx-signin').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var pass = $('vx-pass').value;
+    $('vx-pass').value = '';
+    code = ''; recovery = false;
+    ask({ action: 'login', server: $('vx-server').value, username: $('vx-user').value, password: pass });
+  });
+
+  var pad = '';
+  [1, 2, 3, 4, 5, 6, 7, 8, 9, '', 0, '⌫'].forEach(function (k) { pad += k === '' ? '<span></span>' : '<button type="button" data-key="' + k + '">' + k + '</button>'; });
+  $('vx-pad').innerHTML = pad;
+  function sendCode() { var c = code; code = ''; ask({ action: 'login', code: c }); }
+  function typeKey(k) {
+    if (k === '⌫' || k === 'Backspace') code = code.slice(0, -1);
+    else if (/^\d$/.test(k) && code.length < 6) code += k;
+    else return;
+    renderCode();
+    if (code.length === 6) sendCode();
+  }
+  $('vx-pad').addEventListener('click', function (ev) { var k = ev.target.getAttribute && ev.target.getAttribute('data-key'); if (k) typeKey(k); });
+  function onKey(ev) {
+    if (!document.body.contains(root)) return document.removeEventListener('keydown', onKey);
+    if (view === 'code' && !recovery) typeKey(ev.key);
+  }
+  document.addEventListener('keydown', onKey);
+  $('vx-code-mode').addEventListener('click', function () { recovery = !recovery; code = ''; renderCode(); });
+  $('vx-code-back').addEventListener('click', function () { code = ''; recovery = false; ask({ action: 'cancelLogin' }); });
+  $('vx-code-go').addEventListener('click', function () {
+    if (recovery) { var r = $('vx-recovery').value.trim(); $('vx-recovery').value = ''; if (r) ask({ action: 'login', code: r }); }
+    else if (code.length === 6) sendCode();
+  });
+
+  $('vx-tree').addEventListener('click', function (ev) {
+    var row = ev.target.closest ? ev.target.closest('.vx-row') : null;
+    if (!row) return;
+    browsed = row.getAttribute('data-path');
+    ask({ action: 'browse', path: browsed });
+  });
+  $('vx-folder-go').addEventListener('click', function () { ask({ action: 'setFolder', folder: st.browse.path }); });
+  function signOut() { browsed = null; filled = false; ask({ action: 'signOut' }); }
+  $('vx-folder-signout').addEventListener('click', signOut);
+  $('vx-signout').addEventListener('click', signOut);
+  $('vx-change').addEventListener('click', function () { browsed = null; ask({ action: 'changeFolder' }); });
+  $('vx-sync').addEventListener('click', function () { ask({ action: 'syncNow' }); });
+  $('vx-auto').addEventListener('click', function () { ask({ action: 'setAuto', auto: !st.auto }); });
+  $('vx-copy').addEventListener('click', function () {
+    var el = $('vx-libpath'), btn = $('vx-copy');
+    var done = function () { text(btn, 'Copied'); setTimeout(function () { text(btn, 'Copy folder path'); }, 1500); };
+    var select = function () { var r = document.createRange(); r.selectNodeContents(el); var s = window.getSelection(); s.removeAllRanges(); s.addRange(r); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(el.textContent).then(done, select); else select();
+  });
+
+  // Keep the page current while it is open; stop once the dialog is gone.
+  var timer = setInterval(function () {
+    if (!document.body.contains(root)) return clearInterval(timer);
+    if (view !== 'update') ask({});
+  }, 1000);
+  ask({});
+})();
+</script>
