@@ -1,6 +1,5 @@
+Warning: no stdin data received in 3s, proceeding without it. If piping from a slow command, redirect stdin explicitly: < /dev/null to skip, or wait longer.
 ## What's Changed
 
-### ✨ New Features
-- Sign in to your Vaultix drive from ncSender, including accounts that use two-factor authentication or app passwords
-- Pick a folder on your Vaultix drive to sync with the kiosk
-- G-code files in the chosen folder stay in sync with the kiosk's file manager automatically
+### 🐛 Bug Fixes
+- Buttons, folder rows, the code keypad and the on/off switch now keep their intended size and colours when shown inside ncSender
