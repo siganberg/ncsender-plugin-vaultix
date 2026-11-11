@@ -1,7 +1,7 @@
 {
   "id": "com.ncsender.vaultix",
   "name": "Vaultix Sync",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "minAppVersion": "2.0.225",
   "author": "FrancisCreation",
   "description": "Syncs a folder of your Vaultix cloud drive with the ncSender file manager on a kiosk. Sign in with your Vaultix account (two-factor codes and app passwords work), pick a folder, and its G-code files appear under Vaultix in the file manager; files made on the kiosk go back up. On a desktop it shows how to set up the Vaultix app instead.",

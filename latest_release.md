@@ -2,4 +2,4 @@ Warning: no stdin data received in 3s, proceeding without it. If piping from a s
 ## What's Changed
 
 ### 🐛 Bug Fixes
-- Buttons, folder rows, the code keypad and the on/off switch now keep their intended size and colours when shown inside ncSender
+- Laser files and other G-code files now sync along with your regular G-code files. This covers files ending in .gc, .g, .gco and .ncc.
