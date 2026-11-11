@@ -307,7 +307,11 @@ test('helpers', () => {
   assert.equal(w.fn('base64')('francis:vx_é'), Buffer.from('francis:vx_é').toString('base64'));
   assert.equal(w.fn('cleanFolder')('/CNC/../Signs/'), 'CNC/Signs');
   assert.equal(w.fn('isGcode')('A.NC'), true);
+  assert.equal(w.fn('isGcode')('Milan.gc'), true);
+  assert.equal(w.fn('isGcode')('part.g'), true);
+  assert.equal(w.fn('isGcode')('part.ncc'), true);
   assert.equal(w.fn('isGcode')('a.txt'), false);
+  assert.equal(w.fn('isGcode')('drawing.svg'), false);
   assert.match(w.fn('conflictName')('Signs/logo.nc', 0), /^Signs\/logo \(conflict kiosk \d{4}-\d\d-\d\d \d{4}\)\.nc$/);
   const parsed = JSON.parse(JSON.stringify(w.fn('parseMultistatus')(
     '<d:multistatus xmlns:d="DAV:"><d:response><d:href>http://h/dav/My%20Folder/</d:href><d:propstat><d:prop><d:resourcetype><d:collection/></d:resourcetype></d:prop></d:propstat></d:response>' +

@@ -22,7 +22,7 @@ The password is used once and never stored. The kiosk keeps a device token inste
 ## How sync works
 
 - Synced files live in a `Vaultix` folder in the ncSender file manager.
-- Only G-code files sync: `.nc`, `.gcode`, `.ngc`, `.tap`, `.cnc`.
+- Only G-code and laser files sync: `.nc`, `.gcode`, `.gc`, `.g`, `.gco`, `.ngc`, `.ncc`, `.tap`, `.cnc`.
 - It checks every minute, and waits while a job is running. **Sync now** checks straight away.
 - A new or changed file on either side is copied to the other.
 - A file changed in both places keeps both copies; the kiosk's copy is saved as `name (conflict kiosk <date>).nc`.

@@ -19,7 +19,7 @@
  */
 
 var LOCAL_ROOT = 'Vaultix';
-var EXTENSIONS = ['.nc', '.gcode', '.ngc', '.tap', '.cnc'];
+var EXTENSIONS = ['.nc', '.gcode', '.gc', '.g', '.gco', '.ngc', '.ncc', '.tap', '.cnc'];
 var TICK_MS = 5000;
 var AUTO_EVERY_MS = 60000;
 var MAX_FILES = 5000;
